@@ -1,0 +1,5 @@
+rootProject.name = 'nhhackaton'
+include 'application'
+include 'domain'
+include 'core'
+

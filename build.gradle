@@ -1,0 +1,76 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.0'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+test {
+	useJUnitPlatform()
+}
+
+allprojects {
+	group = 'org.nhhackaton'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '1.8'
+}
+
+def javaProjects = [
+        project(':application'),
+		project(':core'),
+		project(':domain')
+]
+
+configure(javaProjects) {
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	repositories {
+		mavenCentral()
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation('org.springframework.boot:spring-boot-starter-test') {
+			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		}
+	}
+}
+
+project(':application') {
+	dependencies {
+		compile project(':core')
+		compile project(':domain')
+	}
+}
+
+project(':domain') {
+	dependencies {
+		compile project(':core')
+	}
+}
+
+project(':core') {
+	dependencies {
+
+	}
+}
