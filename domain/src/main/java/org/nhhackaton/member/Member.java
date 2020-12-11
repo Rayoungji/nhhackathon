@@ -12,4 +12,7 @@ public class Member {
     private String password;
     //예치금
     private int deposit;
+
+    //fcm token
+    private String fcmToken;
 }
