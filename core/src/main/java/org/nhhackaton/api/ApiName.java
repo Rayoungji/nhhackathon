@@ -14,7 +14,8 @@ public enum ApiName {
     DEPOSIT_RESULT("P2PNInvestmentDepositAmountReturnResultList.nh"),
     OPEN_ACCOUNT("OpenFinAccountDirect.nh"),
     CHECK_ACCOUNT("CheckFinAccountDirect.nh"),
-    Drawing_Transfer("DrawingTransfer.nh");
+    Drawing_Transfer("DrawingTransfer.nh"),
+    Received_Transfer("ReceivedTransferAccountNumber.nh");
 
     private String name;
 

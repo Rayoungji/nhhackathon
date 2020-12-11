@@ -37,13 +37,13 @@ public class HeaderRequest {
 
     public static HeaderRequest of(String api, String[] date) {
         return HeaderRequest.builder()
-                .Tsymd("OpenFinAccountDirect")
-                .Trtm(date[0].replaceAll("-", ""))
-                .IsTuno(date[1].replaceAll(":", ""))
+                .ApiNm(api)
+                .Tsymd(date[0].replaceAll("-", ""))
+                .Trtm(date[1].replaceAll(":", ""))
+                .IsTuno(String.format("%09d", Math.random()*10000000))
                 .Iscd("000671")
                 .FintechApsno("001")
                 .ApiSvcCd("DrawingTransferA")
-                .ApiNm(api)
                 .AccessToken("e053c94bd5b1b0cf188b61dfc9b0378a857c56c15245a15da1cd8a72322e5342")
                 .build();
     }

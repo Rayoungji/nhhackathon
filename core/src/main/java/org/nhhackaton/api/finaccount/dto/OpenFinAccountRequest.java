@@ -1,21 +1,17 @@
-package org.nhhackaton.api.pinaccount.dto;
+package org.nhhackaton.api.finaccount.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.nhhackaton.api.HeaderRequestParent;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
-@Setter
-public class ApplyInvestRequest extends HeaderRequestParent {
-    //핀어카운트 발금에 필요한 계좌 정보 + 투자할 금액
-
-    @JsonProperty("investPrice")
-    private String investPrice;
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class OpenFinAccountRequest extends HeaderRequestParent {
 
     @JsonProperty("DrtrRgyn")
     private String DrtrRgyn;
@@ -28,4 +24,5 @@ public class ApplyInvestRequest extends HeaderRequestParent {
 
     @JsonProperty("Acno")
     private String Acno;
+
 }

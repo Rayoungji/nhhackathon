@@ -2,11 +2,10 @@ package org.nhhackaton.deposit.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nhhackaton.api.ApiCallService;
-import org.nhhackaton.api.pinaccount.dto.ApplyInvestRequest;
-import org.nhhackaton.api.pinaccount.dto.OpenFinAccountRequest;
-import org.nhhackaton.api.pinaccount.PinAccountCreateService;
-import org.nhhackaton.api.pinaccount.dto.OpenFinAccountResponse;
+import org.nhhackaton.api.finaccount.FinAccountApiService;
+import org.nhhackaton.api.finaccount.dto.ApplyInvestRequest;
+import org.nhhackaton.api.finaccount.dto.OpenFinAccountRequest;
+import org.nhhackaton.api.finaccount.dto.OpenFinAccountResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class DepositController {
 
-    private final ApiCallService apiCallService;
-    private final PinAccountCreateService pinAccountCreateService;
+    private final FinAccountApiService FinAccountApiService;
 
     @PostMapping("/invest")
     public ResponseEntity putDepositMoneyToVirtualAccount(@RequestBody ApplyInvestRequest applyInvestRequest) {
@@ -28,7 +26,7 @@ public class DepositController {
                 .Bncd(applyInvestRequest.getBncd())
                 .Acno(applyInvestRequest.getAcno()).build();
 
-        ResponseEntity<OpenFinAccountResponse> call = pinAccountCreateService.call(openFinAccountRequest);
+        ResponseEntity<OpenFinAccountResponse> call = FinAccountApiService.open(openFinAccountRequest);
         System.out.println(call.getBody().getHeader().getRsms());
         return ResponseEntity.ok().build();
     }

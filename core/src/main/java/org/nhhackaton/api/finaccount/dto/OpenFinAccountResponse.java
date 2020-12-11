@@ -1,19 +1,21 @@
-package org.nhhackaton.api.pinaccount.dto;
+package org.nhhackaton.api.finaccount.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.nhhackaton.api.HeaderResponse;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class CheckFinAccountRequest {
+public class OpenFinAccountResponse {
+
     @JsonProperty("Rgno")
     private String Rgno;
 
-    @JsonProperty("BrdtBrno")
-    private String BrdtBrno;
+    @JsonProperty("Header")
+    private HeaderResponse Header;
 }
