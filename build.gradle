@@ -1,3 +1,10 @@
+buildscript {
+	ext {
+		springBootVersion = '2.3.1.RELEASE'
+		mysqlVersion = '8.0.17'
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.4.0'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
@@ -71,6 +78,6 @@ project(':domain') {
 
 project(':core') {
 	dependencies {
-
+		compile group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.3.RELEASE'
 	}
 }
