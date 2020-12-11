@@ -17,8 +17,6 @@ public class Loan {
     @JoinColumn(name = "MEMBER_ID", referencedColumnName = "MEMBER_ID")
     private Member loanMember;  //투자자
 
-    @Embedded
-    private Investor investor; //투자자리스트
     private String loanPrice;  //대출금액
     private LocalDate loanDate;  //대출일
     private String interest;  //이자
