@@ -1,4 +1,4 @@
-package org.nhhackaton.document;
+package org.nhhackaton.document.entity;
 
 /**
  * 공통서류
