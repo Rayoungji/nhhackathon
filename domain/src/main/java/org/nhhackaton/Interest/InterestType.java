@@ -1,4 +1,5 @@
 package org.nhhackaton.Interest;
 
-public class InterestType {
+public enum InterestType {
+    REQUEST, WAIT, COMPLETE
 }
