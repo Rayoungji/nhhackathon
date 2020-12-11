@@ -1,27 +1,26 @@
 package org.nhhackaton.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class ApiCallService<T> {
 
-    private static long DEAL_NO = 1;
+    private static long DEAL_NO =50;
     private final String URL = "https://developers.nonghyup.com/";
 
     private final RestTemplate restTemplate;
 
-    public ResponseEntity<T> post(ApiName api, Object body) {
-        return callApiEndpoint(api.getName(), HttpMethod.POST, setHeader(api), body,(Class<T>)Object.class);
+    public ResponseEntity<T> post(ApiName api, MultiValueMap<String, String> params, Class<T> clazz) {
+        return restTemplate.postForEntity(URL + api.getName(), new HttpEntity<>(params, setHeader(api)), clazz);
     }
 
     private ResponseEntity<T> callApiEndpoint(String api, HttpMethod httpMethod, HttpHeaders httpHeaders, Object body, Class<T> clazz) {
@@ -33,14 +32,17 @@ public class ApiCallService<T> {
 
         String[] dateTime = getDateTime();
 
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
         headers.set("ApiNm", api.getName());
         headers.set("Tsymd", dateTime[0].replaceAll("-", ""));
         headers.set("Trtm", dateTime[1].replaceAll(":", ""));
-        headers.set("Iscd", "기관코드");
+        headers.set("Iscd","000671");
         headers.set("FintechApsno", "001");
         headers.set("APISvcCd", "DrawingTransferA");
         headers.set("Istuno", String.format("%06d", DEAL_NO++));
-        headers.set("AccessToken", "액세스토큰");
+        headers.set("AccessToken", "e053c94bd5b1b0cf188b61dfc9b0378a857c56c15245a15da1cd8a72322e5342");
 
         return headers;
     }
