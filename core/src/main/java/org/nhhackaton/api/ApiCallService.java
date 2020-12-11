@@ -13,7 +13,6 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class ApiCallService<T> {
 
-    private static long DEAL_NO =50;
     private final String URL = "https://developers.nonghyup.com/";
 
     private final RestTemplate restTemplate;

@@ -1,4 +1,4 @@
-package org.nhhackaton.api.pinaccount.dto;
+package org.nhhackaton.api.finaccount.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
