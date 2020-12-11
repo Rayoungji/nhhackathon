@@ -1,7 +1,10 @@
-package org.nhhackaton.deposit.request;
+package org.nhhackaton.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,5 +35,16 @@ public class HeaderRequest {
     @JsonProperty("AccessToken")
     private String AccessToken;
 
-
+    public static HeaderRequest of(String api, String[] date) {
+        return HeaderRequest.builder()
+                .Tsymd("OpenFinAccountDirect")
+                .Trtm(date[0].replaceAll("-", ""))
+                .IsTuno(date[1].replaceAll(":", ""))
+                .Iscd("000671")
+                .FintechApsno("001")
+                .ApiSvcCd("DrawingTransferA")
+                .ApiNm(api)
+                .AccessToken("e053c94bd5b1b0cf188b61dfc9b0378a857c56c15245a15da1cd8a72322e5342")
+                .build();
+    }
 }
