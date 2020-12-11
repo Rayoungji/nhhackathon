@@ -12,10 +12,12 @@ import org.nhhackaton.api.HeaderRequestParent;
 @Getter
 @Setter
 public class ApplyInvestRequest extends HeaderRequestParent {
-    //핀어카운트 발금에 필요한 계좌 정보 + 투자할 금액
 
     @JsonProperty("investPrice")
     private String investPrice;
+
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("DrtrRgyn")
     private String DrtrRgyn;

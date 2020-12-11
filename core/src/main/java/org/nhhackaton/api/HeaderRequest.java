@@ -40,7 +40,7 @@ public class HeaderRequest {
                 .ApiNm(api)
                 .Tsymd(date[0].replaceAll("-", ""))
                 .Trtm(date[1].replaceAll(":", ""))
-                .IsTuno(String.format("%09d", Math.random()*10000000))
+                .IsTuno(String.format("%09f", Math.random()*10000000))
                 .Iscd("000671")
                 .FintechApsno("001")
                 .ApiSvcCd("DrawingTransferA")
