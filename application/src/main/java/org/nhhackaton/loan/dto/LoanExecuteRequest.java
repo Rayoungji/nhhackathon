@@ -15,7 +15,6 @@ public class LoanExecuteRequest {
     private String studentIdentity;
     private String loanAmount;
     private String term;
-    private String loanNo;
     private String studentBankCode;
     private String studentAccount;
     private String studentName;
@@ -23,7 +22,7 @@ public class LoanExecuteRequest {
     public Loan of(){
         return Loan.builder()
                 .loanDate(LocalDate.now())
-                .loanMonth(Integer.parseInt(term))
+                .endDate(LocalDate.now().plusMonths(Long.parseLong(term)))
                 .isRepay(false)
                 .repayCount(0)
                 .receiver(studentName)
