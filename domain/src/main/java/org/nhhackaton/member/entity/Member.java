@@ -2,7 +2,6 @@ package org.nhhackaton.member.entity;
 
 
 import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 
@@ -25,18 +24,18 @@ public class Member {
     private String name;
     private String investVirtualAccount;
     private String repaymentVirtualAccount;
-    private String investFinAccount;
-    private String repaymentFinAccount;
+    private String finAccount;
+    private String bcCd;
+    private String accountNum;
     private boolean isVerified;
 
-
-    public void setInvestFinAccount(String investFinAccount) {
-        this.investFinAccount = investFinAccount;
+    public void setFinAccount(String finAccount) {
+        this.finAccount = finAccount;
     }
 
-    public void setRepaymentFinAccount(String repaymentFinAccount) {
-        this.repaymentFinAccount = repaymentFinAccount;
-        this.isVerified = isVerified;
+    public void setAccountInfo(String bcCd, String accountNum) {
+        this.bcCd = bcCd;
+        this.accountNum = accountNum;
     }
 
     public void setInvestVirtualAccount(String investVirtualAccount) {

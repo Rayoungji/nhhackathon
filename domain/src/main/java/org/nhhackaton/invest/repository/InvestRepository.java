@@ -9,4 +9,8 @@ import java.util.List;
 public interface InvestRepository extends JpaRepository<Invest, Long> {
 
     List<Invest> findInvestByInvestMemberAndIsLoanIsFalse(Member member);
+
+    List<Invest> findInvestByInvestMemberAndIsLoanIsTrue(Member member);
+
+    List<Invest> findInvestByInvestMember(Member member);
 }

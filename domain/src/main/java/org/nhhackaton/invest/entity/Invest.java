@@ -1,6 +1,7 @@
 package org.nhhackaton.invest.entity;
 
 import lombok.*;
+import org.apache.tomcat.jni.Local;
 import org.nhhackaton.member.entity.Member;
 
 import javax.persistence.*;
@@ -25,6 +26,11 @@ public class Invest {
     private String investPrice; //투자금액
     private String investDate; //투자날짜
     private Boolean isLoan; //대출여부
+    private String loanDate; //대출날짜
 
-
+    public Invest update(){
+        this.isLoan = true;
+        this.loanDate = LocalDate.now().toString().replaceAll("-", "");
+        return this;
+    }
 }
