@@ -27,7 +27,7 @@ public class Loan {
     private String loanPrice;  //투자자가 얼마를 대출해줬는지
     private LocalDate loanDate;  //대출일
     private String interest;  //이자
-    private int loanMonth;  //대출개월수
+    private LocalDate endDate;  //대출개월수
     private int repayCount;  //이자상환횟수
     private Boolean isRepay;  //원금상환여부
     private long loanNo;
@@ -39,7 +39,7 @@ public class Loan {
     public static Loan of(Loan loan, Member member, String loanPrice, String interest, long loanNo){
         return Loan.builder()
                 .loanDate(loan.getLoanDate())
-                .loanMonth(loan.getLoanMonth())
+                .endDate(loan.getEndDate())
                 .isRepay(loan.getIsRepay())
                 .repayCount(loan.getRepayCount())
                 .receiver(loan.getReceiver())
