@@ -68,10 +68,10 @@ public class LoanController {
         loanService.executeRepayment(loanNo);
     }
 
-//    @PostMapping("/interest/repayment")
-//    public void executeInterestRepayment(@PathVariable String loanNo){
-//        //TODO 원리금 상환 추가해야함
-//        loanService.executeInterestRepayment(loanNo);
-//    }
+    @PostMapping("/interest/repayment/{loanNo}")
+    public void executeInterestRepayment(@PathVariable String loanNo){
+        //TODO 원리금 상환 추가해야함
+        loanService.executeInterestRepayment(loanNo);
+    }
 
 }

@@ -56,4 +56,9 @@ public class Loan {
         return this;
     }
 
+    public Loan updateCount(){
+        this.repayCount ++;
+        return this;
+    }
+
 }

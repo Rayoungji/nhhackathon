@@ -20,6 +20,7 @@ public class LoanExecuteRequest {
         return Loan.builder()
                 .loanDate(LocalDate.now())
                 .endDate(LocalDate.now().plusMonths(Long.parseLong(term)))
+                .loanPrice(loanAmount)
                 .isRepay(false)
                 .repayCount(0)
                 .receiverIdentity(studentIdentity)

@@ -41,10 +41,10 @@ public class HeaderRequest {
                 .Tsymd(date[0].replaceAll("-", ""))
                 .Trtm(date[1].replaceAll(":", ""))
                 .IsTuno(String.format("%09f", Math.random()*10000000))
-                .Iscd("000737")
+                .Iscd("000740")
                 .FintechApsno("001")
                 .ApiSvcCd("DrawingTransferA")
-                .AccessToken("78c9e2d30d0168ca73ef880090061f96671b05a50661369a2abdf66dd625f8be")
+                .AccessToken("4c7b6fca57787295cc05e8d623fd1cc9d67536a7ad26754adb6f8b94fe8e5155")
                 .build();
     }
 }

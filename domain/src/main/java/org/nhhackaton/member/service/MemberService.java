@@ -31,6 +31,12 @@ public class MemberService {
         return memberRepository.findByIdentity(identity).orElseThrow(MemberNotFoundException::new).isVerified();
     }
 
+    public void validateTest(String identity){
+        Member member = memberRepository.findByIdentity(identity).orElseThrow(MemberNotFoundException::new);
+        member.validate();
+        memberRepository.save(member);
+    }
+
     public String getUrl(MultipartFile multipartFile, String identity){
         try {
             return s3Uploader.upload(multipartFile, identity,  "documents_" + UUID.randomUUID().toString());

@@ -34,13 +34,18 @@ public class MemberController {
         return memberService.getUrl(multipartFile, identity);
     }
 
+    @GetMapping("/a/{identity}")
+    public void validateTest(@PathVariable String identity){
+        memberService.validateTest(identity);
+    }
+
     @PostMapping("/{identity}")
     public void test(@PathVariable String identity) {
         Member m = Member.builder()
                 .identity(identity)
-                .birthday("19970503")
+                .birthday("19501212")
                 .password("password")
-                .name("라영지")
+                .name("재호")
                 .build();
 
         memberService.signInForTest(m);

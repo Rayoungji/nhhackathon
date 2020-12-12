@@ -12,10 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SetAccountRequest {
 
-    @JsonProperty("Bncd")
-    private String Bncd;
+    private String bncd;
 
-    @JsonProperty("Acno")
-    private String Acno;
+    private String acno;
     
 }

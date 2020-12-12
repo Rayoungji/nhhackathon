@@ -29,6 +29,10 @@ public class Member {
     private String accountNum;
     private boolean isVerified;
 
+    public void validate(){
+        this.isVerified = !this.isVerified;
+    }
+
     public void setFinAccount(String finAccount) {
         this.finAccount = finAccount;
     }

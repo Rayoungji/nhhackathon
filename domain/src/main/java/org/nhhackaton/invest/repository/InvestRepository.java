@@ -13,4 +13,6 @@ public interface InvestRepository extends JpaRepository<Invest, Long> {
     List<Invest> findInvestByInvestMemberAndIsLoanIsTrue(Member member);
 
     List<Invest> findInvestByInvestMember(Member member);
+
+    List<Invest> findAllByIsLoanFalseOrderByIdAsc();
 }

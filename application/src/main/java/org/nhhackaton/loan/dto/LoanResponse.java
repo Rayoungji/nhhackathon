@@ -46,7 +46,7 @@ public class LoanResponse {
                 )
                 .date(loans.get(0).getLoanDate().toString())
                 .loanNo(loans.get(0).getLoanNo())
-                .term(String.valueOf(ChronoUnit.MONTHS.between(loans.get(0).getEndDate(), loans.get(0).getLoanDate())))
+                .term(String.valueOf(ChronoUnit.MONTHS.between(loans.get(0).getLoanDate(), loans.get(0).getEndDate())))
                 .repayCount(loans.get(0).getRepayCount())
                 .build();
     }

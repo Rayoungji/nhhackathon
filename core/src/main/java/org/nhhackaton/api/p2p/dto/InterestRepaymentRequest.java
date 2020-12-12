@@ -1,6 +1,7 @@
 package org.nhhackaton.api.p2p.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class InterestRepaymentRequest extends HeaderRequestParent {
     private String RpaySumAmt;
     @JsonProperty("RpayYmd")
     private String RpayYmd;
+    @JsonProperty("Vran")
+    private String Vran;
     @JsonProperty("DractOtlt")
     private String DractOtlt;
     @JsonProperty("MractOtlt")

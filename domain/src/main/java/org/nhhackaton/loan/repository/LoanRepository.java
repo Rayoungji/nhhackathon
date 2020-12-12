@@ -11,6 +11,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     Optional<Loan> findFirstByOrderByIdDesc();
     List<Loan> findByReceiverIdentity(String identity);
-    List<Loan> findByLoanNo(String loanNo);
+    List<Loan> findByLoanNo(long loanNo);
 
 }

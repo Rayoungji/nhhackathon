@@ -80,7 +80,7 @@ public class LoanService {
                         invest.getInvestMember(),
                         invest.getInvestPrice(),
                         String.valueOf(
-                                ((Float.parseFloat(invest.getInvestPrice()) * COFIX) / ChronoUnit.MONTHS.between(loan.getEndDate(), loan.getLoanDate()))
+                                ((Float.parseFloat(invest.getInvestPrice()) * COFIX) / ChronoUnit.MONTHS.between(loan.getLoanDate(), loan.getEndDate()))
                         ),
                         loanNo)
                 )
@@ -88,20 +88,25 @@ public class LoanService {
 
         loanRepository.saveAll(loanList);
 
-        p2PApiService.executeInvest(
+        ResponseEntity<InvestPaymentResponse> investPaymentResponseResponseEntity = p2PApiService.executeInvest(
                 InvestPaymentRequest.of(
                         투자리스트.stream()
                                 .map(Invest::getInvestPrice)
                                 .mapToInt(Integer::parseInt)
                                 .sum(),
-                        String.valueOf(ChronoUnit.MONTHS.between(loan.getEndDate(), loan.getLoanDate())),
+                        String.valueOf(ChronoUnit.MONTHS.between(loan.getLoanDate(), loan.getEndDate())),
                         String.valueOf(loan.getLoanNo()),
                         receiver.getBcCd(),
                         receiver.getAccountNum(),
                         receiver.getName(),
-                        Arrays.asList()
+                        투자리스트.stream()
+                            .map(invest -> InvestPaymentREC.of(invest.getInvestMember().getInvestVirtualAccount(), invest.getInvestPrice()))
+                            .collect(Collectors.toList())
                 )
         );
+
+        System.out.println(investPaymentResponseResponseEntity.getBody().getHeader().getRsms());
+
 
         List<Invest> invests = 투자리스트.stream()
                 .map(invest -> invest.update())
@@ -159,8 +164,9 @@ public class LoanService {
     }
 
 
+    @Transactional
     public void executeRepayment(String loanNo){
-        List<Loan> loanList = loanRepository.findByLoanNo(loanNo);
+        List<Loan> loanList = loanRepository.findByLoanNo(Long.parseLong(loanNo));
 
         Member receiver = memberRepository.findByIdentity(loanList.get(0).getReceiverIdentity()).orElseThrow(MemberNotFoundException::new);
 
@@ -176,19 +182,23 @@ public class LoanService {
                                          .mapToInt(Integer::parseInt)
                                          .sum()
                          )
-                    )
+                    ).Vran(receiver.getRepaymentVirtualAccount())
                     .RpayYmd(LocalDate.now().toString().replaceAll("-", ""))
                     .DractOtlt(receiver.getName() + "투자금 회수")
                     .MractOtlt("원금 상환")
                     .Rec(
                             loanList.stream()
-                                    .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getAccountNum(), loan.getLoanPrice()))
+                                    .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getInvestVirtualAccount(), loan.getLoanPrice()))
                                     .collect(Collectors.toList())
                     )
                     .build();
 
 
-        p2PApiService.executeInterest(interestRepaymentRequest);
+        ResponseEntity<InterestRepaymentResponse> interestRepaymentResponseResponseEntity = p2PApiService.executeInterest(interestRepaymentRequest);
+
+        System.out.println(interestRepaymentResponseResponseEntity.getBody().getHeader().getRsms());
+
+
         loanList.stream()
                 .forEach(loan -> returnDeposit(loan, loan.getLoanPrice(), false));
 
@@ -197,9 +207,11 @@ public class LoanService {
                 .forEach(loan -> loanRepository.save(loan));
 
     }
-
+    @Transactional
     public void executeInterestRepayment(String loanNo){
-        List<Loan> loanList = loanRepository.findByLoanNo(loanNo);
+        List<Loan> loanList = loanRepository.findByLoanNo(Long.parseLong(loanNo));
+
+        Member receiver = memberRepository.findByIdentity(loanList.get(0).getReceiverIdentity()).orElseThrow(MemberNotFoundException::new);
 
         InterestRepaymentRequest interestRepaymentRequest =
                 InterestRepaymentRequest.builder()
@@ -214,20 +226,23 @@ public class LoanService {
                                                 .sum()
                                 )
                         )
+                        .Vran(receiver.getRepaymentVirtualAccount())
                         .RpayYmd(LocalDate.now().toString().replaceAll("-", ""))
-                        .DractOtlt(LocalDate.now().getMonth().name()+ "월분 이자")
+                        .DractOtlt(LocalDate.now().getMonthValue()+ "월분 이자")
                         .MractOtlt("이자 상환")
                         .Rec(
                                 loanList.stream()
-                                        .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getAccountNum(), loan.getInterest()))
+                                        .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getInvestVirtualAccount(), loan.getInterest()))
                                         .collect(Collectors.toList())
                         )
                         .build();
 
 
-        p2PApiService.executeInterest(interestRepaymentRequest);
+        ResponseEntity<InterestRepaymentResponse> interestRepaymentResponseResponseEntity = p2PApiService.executeInterest(interestRepaymentRequest);
+        System.out.println(interestRepaymentResponseResponseEntity.getBody().getHeader().getRsms());
 
         loanList.stream()
+                .peek(loan -> loanRepository.save(loan.updateCount()))
                 .forEach(loan -> returnDeposit(loan, loan.getInterest(), true));
     }
 
@@ -244,12 +259,33 @@ public class LoanService {
                 .MractOtlt(isInterest ? "이자입금" : "원금입금")
                 .build();
 
-        p2PApiService.executeDepositReturn(depositReturnRequest);
+        ResponseEntity<DepositReturnResponse> depositReturnResponseResponseEntity = p2PApiService.executeDepositReturn(depositReturnRequest);
+        System.out.println(depositReturnResponseResponseEntity.getBody().getHeader().getRsms());
+
     }
 
     private List<Invest> getInvestorList(String loanPrice){
         //TODO 매칭 알고리즘
-        return new ArrayList<>();
+
+        List<Invest> invests = investRepository.findAllByIsLoanFalseOrderByIdAsc();
+        List<Invest> investCandidate = new ArrayList<>();
+
+        long price = Long.parseLong(loanPrice);
+        for(Invest invest : invests){
+
+            if(Long.parseLong(invest.getInvestPrice()) < price){
+                investCandidate.add(invest);
+                price -= Long.parseLong(invest.getInvestPrice());
+                continue;
+            }else if(Long.parseLong(invest.getInvestPrice()) > price){
+                continue;
+            }else{
+                investCandidate.add(invest);
+                break;
+            }
+        }
+
+        return investCandidate;
     }
 
 }
