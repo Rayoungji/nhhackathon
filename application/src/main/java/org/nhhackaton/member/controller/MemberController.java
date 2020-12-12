@@ -45,7 +45,7 @@ public class MemberController {
                 .identity(identity)
                 .birthday("19501213")
                 .password("password")
-                .name("라영지")
+                .name("재호")
                 .build();
 
         memberService.signInForTest(m);
