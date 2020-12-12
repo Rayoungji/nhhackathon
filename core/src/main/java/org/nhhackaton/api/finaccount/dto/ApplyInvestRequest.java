@@ -11,7 +11,7 @@ import org.nhhackaton.api.HeaderRequestParent;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ApplyInvestRequest extends HeaderRequestParent {
+public class ApplyInvestRequest {
 
     @JsonProperty("investPrice")
     private String investPrice;

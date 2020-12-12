@@ -79,6 +79,14 @@ public class InvestService {
         return investResponse;
     }
 
+    public List<Invest> getLoanTrueList(Member member) {
+        return investRepository.findInvestByInvestMemberAndIsLoanIsTrue(member);
+    }
+
+    public List<Invest> getInvestsByMember(Member member) {
+        return investRepository.findInvestByInvestMember(member);
+    }
+
     public void makeInvestFinAccount(Member member, OpenFinAccountRequest openFinAccountRequest) {
         ResponseEntity<OpenFinAccountResponse> open = finAccountApiService.open(openFinAccountRequest);
         log.warn(" ========= MAKE INVEST FIN ACCOUNT START =============");

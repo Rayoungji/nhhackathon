@@ -25,6 +25,7 @@ public class Invest {
     private String investPrice; //투자금액
     private String investDate; //투자날짜
     private Boolean isLoan; //대출여부
+    private String loanDate; //대출날짜
 
 
 }
