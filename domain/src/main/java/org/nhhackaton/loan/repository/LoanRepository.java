@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     Optional<Loan> findFirstByOrderByIdDesc();
-    List<Loan> findByLoanMember(Member member);
     List<Loan> findByReceiverIdentity(String identity);
+    List<Loan> findByLoanNo(String loanNo);
+
 }
