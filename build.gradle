@@ -78,6 +78,5 @@ project(':domain') {
 
 project(':core') {
 	dependencies {
-		compile group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.3.RELEASE'
 	}
 }

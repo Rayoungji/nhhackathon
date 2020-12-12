@@ -6,6 +6,7 @@ import org.nhhackaton.member.entity.Member;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Getter
 @Entity
 @Table(name = "INVESTS")
 @Builder
