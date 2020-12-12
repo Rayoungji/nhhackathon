@@ -15,7 +15,12 @@ public enum ErrorCode {
 
 
     //Member
-    DOCUMENT_EMPTY(400, "Check The Document")
+    DOCUMENT_EMPTY(400, "Check The Document"),
+    DOCUMENT_UPLOAD_FAIL(400, "Document Upload Fail"),
+    MEMBER_NOT_FOUND(400, "Cannot Found User"),
+
+    //Loan
+    LOAN_NOT_FOUND(400, "Cannot Found Loan")
     ;
 
 

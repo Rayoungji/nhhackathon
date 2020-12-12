@@ -9,3 +9,10 @@ spring:
     url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+wap:
+  aws:
+    s3:
+      cores:
+        bucket: we-are-player-bucket-test
+        accessKey: AKIA3HOU2U6W2ARI7YLQ
+        secretKey: 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
