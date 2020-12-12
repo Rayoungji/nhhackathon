@@ -20,6 +20,8 @@ import org.nhhackaton.member.entity.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -62,6 +64,19 @@ public class InvestService {
 
         investRepository.save(invest);
 
+    }
+
+    public Invest getDeposit(Member member) {
+        List<Invest> invests = investRepository.findInvestByInvestMemberAndIsLoanIsFalse(member);
+        log.warn(" ========= GET DEPOSIT START =============");
+        int depositPrice = invests.stream().mapToInt(invest -> Integer.parseInt(invest.getInvestPrice())).sum();
+        Invest investResponse = Invest.builder()
+                .investMember(member)
+                .investPrice(String.valueOf(depositPrice)).build();
+        log.warn("예치금 금액 : " + depositPrice);
+        log.warn(" ========= GET DEPOSIT END =============");
+
+        return investResponse;
     }
 
     public void makeInvestFinAccount(Member member, OpenFinAccountRequest openFinAccountRequest) {

@@ -1,9 +1,6 @@
 package org.nhhackaton.invest.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.nhhackaton.member.entity.Member;
 
 import javax.persistence.*;
@@ -12,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "INVESTS")
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Invest {

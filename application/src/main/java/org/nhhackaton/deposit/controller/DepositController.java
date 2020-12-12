@@ -4,6 +4,8 @@ package org.nhhackaton.deposit.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nhhackaton.api.finaccount.dto.*;
+import org.nhhackaton.deposit.controller.dto.GetDepositResponse;
+import org.nhhackaton.invest.entity.Invest;
 import org.nhhackaton.invest.service.InvestService;
 import org.nhhackaton.member.entity.Member;
 import org.nhhackaton.member.service.MemberService;
@@ -21,7 +23,9 @@ public class DepositController {
 
     @GetMapping("/{identity}")
     public ResponseEntity getDeposit(@PathVariable String identity) {
-        return null;
+        Member loginMember = memberService.getMemberByIdentity(identity);
+        Invest invest = investService.getDeposit(loginMember);
+        return ResponseEntity.ok(new GetDepositResponse(invest.getInvestPrice()));
     }
 
     @PostMapping("/apply-invest/{identity}")
@@ -42,5 +46,10 @@ public class DepositController {
         investService.applyInvest(loginMember, applyInvestRequest.getInvestPrice());
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/inverstor-list/{identity}")
+    public ResponseEntity getDepositList(@PathVariable String identity) {
+        return null;
     }
 }
