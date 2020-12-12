@@ -1,6 +1,7 @@
 package org.nhhackaton.member.service;
 
 import lombok.RequiredArgsConstructor;
+
 import org.nhhackaton.aws.s3.S3Uploader;
 import org.nhhackaton.document.entity.Document;
 import org.nhhackaton.document.repository.DocumentRepository;
@@ -13,6 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import org.nhhackaton.member.entity.Member;
+
+
+import javax.persistence.EntityExistsException;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +41,14 @@ public class MemberService {
 
     public void saveDocument(List<Document> documents){
         documentRepository.saveAll(documents);
+
+
+    public Member getMemberByIdentity(String identity){
+        return memberRepository.findByIdentity(identity).orElseThrow(EntityExistsException::new);
+    }
+
+    public Member signInForTest(Member member) {
+        return memberRepository.save(member);
+
     }
 }
