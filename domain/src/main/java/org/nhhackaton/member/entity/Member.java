@@ -29,7 +29,7 @@ public class Member {
     private String accountNum;
     private boolean isVerified;
 
-    public void validate(){
+    public void validate() {
         this.isVerified = !this.isVerified;
     }
 
@@ -44,5 +44,9 @@ public class Member {
 
     public void setInvestVirtualAccount(String investVirtualAccount) {
         this.investVirtualAccount = investVirtualAccount;
+    }
+
+    public void setRepaymentVirtualAccount(String repaymentVirtualAccount) {
+        this.repaymentVirtualAccount = repaymentVirtualAccount;
     }
 }

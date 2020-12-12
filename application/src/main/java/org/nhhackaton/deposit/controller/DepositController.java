@@ -32,7 +32,7 @@ public class DepositController {
     }
 
     @PostMapping("/apply-invest/{identity}")
-    @ApiOperation("대출하기")
+    @ApiOperation("투자하기")
     public BaseResponse applyInvest(@PathVariable String identity, @RequestBody ApplyInvestRequest applyInvestRequest) {
 
         Member loginMember = memberService.getMemberByIdentity(identity);
@@ -43,7 +43,7 @@ public class DepositController {
     }
 
     @GetMapping("/already-invest-list/{identity}")
-    @ApiOperation("대출목록보기 - 투자완료 리스트")
+    @ApiOperation("투자목록보기 - 투자완료 리스트")
     public List<AlreadyInvestResponse> getAlreadyInvestList(@PathVariable String identity) {
         Member member = memberService.getMemberByIdentity(identity);
         List<AlreadyInvestResponse> alreadyInvestResponses = new ArrayList<>();
@@ -60,7 +60,7 @@ public class DepositController {
     }
 
     @GetMapping("/apply-invest-list/{identity}")
-    @ApiOperation("대출목록보기 - 대출신청 리스트")
+    @ApiOperation("투자목록보기 - 투자신청 리스트")
     public List<ApplyInvestResponse> getApplyInvestList(@PathVariable String identity){
         Member member = memberService.getMemberByIdentity(identity);
         List<ApplyInvestResponse> applyInvestResponses = new ArrayList<>();

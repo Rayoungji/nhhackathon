@@ -44,13 +44,6 @@ public class LoanController {
     public List<Interest> getInterestListByBorrower(@PathVariable String identity){
         return loanService.getInterestListByBorrower(identity);
     }
-  
-    @PostMapping("/draw-loan/{identity}")
-    public BaseResponse drawLoan(@PathVariable String identity, @RequestBody DrawLoanRequest drawLoanRequest) {
-        Member loginMember = memberService.getMemberByIdentity(identity);
-        loanService.drawLoan(loginMember, drawLoanRequest.getLoanPrice());
-        return new BaseResponse("200");
-    }
 
     @ApiOperation("대출금 조회")
     @GetMapping("/{identity}")

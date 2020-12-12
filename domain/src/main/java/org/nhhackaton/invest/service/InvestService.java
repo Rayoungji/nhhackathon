@@ -43,7 +43,8 @@ public class InvestService {
                 .Tram(investPrice)
                 .FinAcno(member.getFinAccount()).build();
         ResponseEntity<DrawingTransferResponse> drawingTransferResponse = transferApiService.draw(drawingTransferRequest);
-        System.out.println(drawingTransferResponse.getBody().getRfsnYmd());  //투자 등록일자
+        System.out.println("투자 등록 일자: "+ drawingTransferResponse.getBody().getHeader().getTsymd());  //투자 등록일자
+        System.out.println("에러메세지: "+ drawingTransferResponse.getBody().getHeader().getRsms());
 
         if (member.getInvestVirtualAccount() == null) {
             //투자자용 가상계좌 발급
@@ -62,7 +63,7 @@ public class InvestService {
                 .isLoan(false)
                 .investPrice(investPrice)
                 .investMember(member)
-                .investDate(drawingTransferResponse.getBody().getRfsnYmd()).build();
+                .investDate(drawingTransferResponse.getBody().getHeader().getTsymd()).build();
 
         investRepository.save(invest);
 

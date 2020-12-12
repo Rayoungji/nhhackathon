@@ -113,6 +113,17 @@ public class LoanService {
                 .collect(Collectors.toList());
 
         investRepository.saveAll(invests);
+
+        if (receiver.getRepaymentVirtualAccount() == null) {
+            //차입자용 가상계좌 발급
+            VirtualAccountRequest virtualAccountRequest = VirtualAccountRequest.builder()
+                    .P2PVractUsg("2")
+                    .P2PCmtmNo("0000000000")
+                    .ChidSqno("0000000000")
+                    .InvstBrwNm(receiver.getName()).build();
+
+            makeLoanVirtualAccount(receiver, virtualAccountRequest);
+        }
     }
 
     public void drawLoan(Member member, String loanPrice) {
@@ -126,27 +137,16 @@ public class LoanService {
         ResponseEntity<DrawingTransferResponse> drawingTransferResponse = transferApiService.draw(drawingTransferRequest);
         System.out.println(drawingTransferResponse.getBody().getRfsnYmd());  //투자 등록일자
 
-        if (member.getRepaymentVirtualAccount() == null) {
-            //차입자용 가상계좌 발급
-            VirtualAccountRequest virtualAccountRequest = VirtualAccountRequest.builder()
-                    .P2PVractUsg("2")
-                    .P2PCmtmNo("0000000000")
-                    .ChidSqno("0000000000")
-                    .InvstBrwNm(member.getName()).build();
-
-            makeLoanVirtualAccount(member, virtualAccountRequest);
-        }
-
         //TODO 핀테크 약정계좌 -> 투자용 가상계좌로 투자금 이체는 현재 테스트 불가
 
     }
 
     public void makeLoanVirtualAccount(Member member, VirtualAccountRequest virtualAccountRequest) {
-        log.warn(" ========= MAKE INVEST VIRTUAL ACCOUNT START =============");
+        log.warn(" ========= MAKE LOAN VIRTUAL ACCOUNT START =============");
         ResponseEntity<VirtualAccountResponse> virtualAccountResponse = p2PApiService.create(virtualAccountRequest);
         System.out.println("VirtualAccount: " + virtualAccountResponse.getBody().getVran()); //가상계좌 발급
-        member.setInvestVirtualAccount(virtualAccountResponse.getBody().getVran());
-        log.warn(" ========= MAKE INVEST VIRTUAL ACCOUNT START =============");
+        member.setRepaymentVirtualAccount(virtualAccountResponse.getBody().getVran());
+        log.warn(" ========= MAKE LOAN VIRTUAL ACCOUNT START =============");
     }
 
     public List<Interest> getInterestListByInvestor(String identity){
@@ -239,11 +239,20 @@ public class LoanService {
 
 
         ResponseEntity<InterestRepaymentResponse> interestRepaymentResponseResponseEntity = p2PApiService.executeInterest(interestRepaymentRequest);
-        System.out.println(interestRepaymentResponseResponseEntity.getBody().getHeader().getRsms());
+        System.out.println("원리금 상환 : " + interestRepaymentResponseResponseEntity.getBody().getHeader().getRsms());
 
         loanList.stream()
-                .peek(loan -> loanRepository.save(loan.updateCount()))
-                .forEach(loan -> returnDeposit(loan, loan.getInterest(), true));
+                .forEach(loan -> {
+                    loanRepository.save(loan.updateCount());
+                    interestRepository.save(
+                            Interest.builder()
+                                    .borrower(receiver.getIdentity())
+                                    .investor(loan.getLoanMember().getIdentity())
+                                    .repaymentDate(LocalDate.now())
+                                    .repaymentPrice(loan.getInterest())
+                                    .build());
+                    returnDeposit(loan, loan.getInterest(), true);
+                });
     }
 
     private void returnDeposit(Loan loan, String price, boolean isInterest){
@@ -260,7 +269,6 @@ public class LoanService {
                 .build();
 
         ResponseEntity<DepositReturnResponse> depositReturnResponseResponseEntity = p2PApiService.executeDepositReturn(depositReturnRequest);
-        System.out.println(depositReturnResponseResponseEntity.getBody().getHeader().getRsms());
 
     }
 

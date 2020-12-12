@@ -43,9 +43,9 @@ public class MemberController {
     public void test(@PathVariable String identity) {
         Member m = Member.builder()
                 .identity(identity)
-                .birthday("19501212")
+                .birthday("19501213")
                 .password("password")
-                .name("재호")
+                .name("라영지")
                 .build();
 
         memberService.signInForTest(m);

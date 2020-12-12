@@ -1,8 +1,6 @@
 package org.nhhackaton.interest.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,10 +9,12 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "INTEREST")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class Interest {
 
     @Id
-    @Column(name = "MEMBER_ID")
+    @Column(name = "INTEREST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
