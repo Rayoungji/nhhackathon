@@ -23,6 +23,9 @@ public enum ErrorCode {
     DOCUMENT_EMPTY(400, "Check The Document"),
     DOCUMENT_UPLOAD_FAIL(400, "Document Upload Fail"),
     MEMBER_NOT_FOUND(400, "Cannot Found User"),
+    MEMBER_ALREADY_EXISIST(400, "Member Already Exsist"),
+    NOT_EXIST_IDENTITY(400, "Not Exist Identity"),
+    NOT_CORRECT_PASSWORD(400, "Not Correct Password"),
 
     //Loan
     LOAN_NOT_FOUND(400, "Cannot Found Loan")
