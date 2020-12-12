@@ -1,5 +1,6 @@
 package org.nhhackaton.member.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nhhackaton.api.finaccount.dto.OpenFinAccountRequest;
 import org.nhhackaton.deposit.dto.BaseResponse;
@@ -23,7 +24,7 @@ public class MemberController {
     private final InvestService investService;
 
     @GetMapping("/{identity}")
-    public boolean validate(@PathVariable String identity){
+    public boolean validate(@PathVariable String identity) {
         return memberService.validate(identity);
     }
 
@@ -33,27 +34,39 @@ public class MemberController {
         return memberService.getUrl(multipartFile, identity);
     }
 
+    @PostMapping("/{identity}")
+    public void test(@PathVariable String identity) {
+        Member m = Member.builder()
+                .identity(identity)
+                .birthday("19970503")
+                .password("password")
+                .name("라영지")
+                .build();
+
+        memberService.signInForTest(m);
+    }
+
     @PostMapping("/set-account/{identity}")
+    @ApiOperation("계좌 등록")
     public BaseResponse setAccount(@PathVariable String identity, @RequestBody SetAccountRequest setAccountRequest) {
+
         Member loginMember = memberService.getMemberByIdentity(identity);
-        loginMember.setAccountInfo(setAccountRequest.getBncd(), setAccountRequest.getAcno());
         OpenFinAccountRequest openFinAccountRequest = OpenFinAccountRequest.builder()
                 .DrtrRgyn("Y")
                 .BrdtBrno(loginMember.getBirthday())
                 .Bncd(setAccountRequest.getBncd())
                 .Acno(setAccountRequest.getAcno()).build();
-
-        investService.makeFinAccount(loginMember, openFinAccountRequest);
+        investService.makeFinAccount(loginMember, openFinAccountRequest, setAccountRequest.getBncd(), setAccountRequest.getAcno());
 
         return new BaseResponse("200");
     }
 
     @PostMapping
-    public void saveDocuments(@RequestBody List<DocumentRequest> documentRequests){
+    public void saveDocuments(@RequestBody List<DocumentRequest> documentRequests) {
         memberService.saveDocument(
                 documentRequests.stream()
-                .map(DocumentRequest::of)
-                .collect(Collectors.toList())
+                        .map(DocumentRequest::of)
+                        .collect(Collectors.toList())
         );
     }
 }

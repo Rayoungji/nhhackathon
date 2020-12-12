@@ -19,6 +19,7 @@ import org.nhhackaton.invest.repository.InvestRepository;
 import org.nhhackaton.member.entity.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class InvestService {
     private final InvestRepository investRepository;
 
 
+    @Transactional
     public void applyInvest(Member member, String investPrice) {
 
         //투자 핀어카운트 -> 핀테크 약정계좌
@@ -66,6 +68,7 @@ public class InvestService {
 
     }
 
+    @Transactional
     public Invest getDeposit(Member member) {
         List<Invest> invests = investRepository.findInvestByInvestMemberAndIsLoanIsFalse(member);
         log.warn(" ========= GET DEPOSIT START =============");
@@ -87,22 +90,25 @@ public class InvestService {
         return investRepository.findInvestByInvestMember(member);
     }
 
-    public void makeFinAccount(Member member, OpenFinAccountRequest openFinAccountRequest) {
+    @Transactional
+    public void makeFinAccount(Member member, OpenFinAccountRequest openFinAccountRequest,String bncd, String acno) {
         ResponseEntity<OpenFinAccountResponse> open = finAccountApiService.open(openFinAccountRequest);
         log.warn(" ========= MAKE FIN ACCOUNT START =============");
-        System.out.println("OpenFin Response: " + open.getBody().getRgno());  //checkFin 요청값
+        System.out.println("OpenFin Response: " + open.getBody().getHeader().getRsms());  //checkFin 요청값
 
         CheckFinAccountRequest checkFinAccountRequest = CheckFinAccountRequest.builder()
                 .Rgno(open.getBody().getRgno())
                 .BrdtBrno(member.getBirthday()).build();
 
         ResponseEntity<CheckFinAccountResponse> check = finAccountApiService.check(checkFinAccountRequest);
-        System.out.println("CheckFin Response: " + check.getBody().getFinAcno());  //InvestFin 발급 완료
+        System.out.println("CheckFin Response: " + check.getBody().getHeader().getRsms());  //InvestFin 발급 완료
 
         member.setFinAccount(check.getBody().getFinAcno());
+        member.setAccountInfo(bncd, acno);
         log.warn(" ========= MAKE INVEST FIN ACCOUNT END =============");
     }
 
+    @Transactional
     public void makeInvestVirtualAccount(Member member, VirtualAccountRequest virtualAccountRequest) {
         log.warn(" ========= MAKE INVEST VIRTUAL ACCOUNT START =============");
         ResponseEntity<VirtualAccountResponse> virtualAccountResponse = p2PApiService.create(virtualAccountRequest);
