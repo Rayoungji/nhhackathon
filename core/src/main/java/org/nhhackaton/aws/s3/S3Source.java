@@ -15,7 +15,7 @@ public class S3Source {
             Properties properties = new Properties();
             InputStream input = S3Source.class.getClassLoader().getResourceAsStream(String.format(PROPERTIES_FILE_NAME, System.getenv("--spring.profiles.active")));
             if(input == null){
-                input = S3Source.class.getClassLoader().getResourceAsStream("aws-s3-dev.properties");
+                input = S3Source.class.getClassLoader().getResourceAsStream("s3/aws-s3-dev.properties");
             }
             properties.load(input);
             return S3ConfigVO.builder()
