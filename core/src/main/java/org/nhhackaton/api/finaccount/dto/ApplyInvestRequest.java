@@ -16,15 +16,6 @@ public class ApplyInvestRequest extends HeaderRequestParent {
     @JsonProperty("investPrice")
     private String investPrice;
 
-    @JsonProperty("name")
-    private String name;
-
-    @JsonProperty("DrtrRgyn")
-    private String DrtrRgyn;
-
-    @JsonProperty("BrdtBrno")
-    private String BrdtBrno;
-
     @JsonProperty("Bncd")
     private String Bncd;
 
