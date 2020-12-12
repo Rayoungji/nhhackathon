@@ -34,7 +34,8 @@ allprojects {
 def javaProjects = [
         project(':application'),
 		project(':core'),
-		project(':domain')
+		project(':domain'),
+		project(':batch')
 ]
 
 configure(javaProjects) {
@@ -78,5 +79,10 @@ project(':domain') {
 
 project(':core') {
 	dependencies {
+	}
+}
+project(':batch') {
+	dependencies {
+		compile project(':domain')
 	}
 }

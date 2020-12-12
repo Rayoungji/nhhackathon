@@ -14,12 +14,13 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 // 빈으로 등록
 @Slf4j
 @RequiredArgsConstructor
 public class FirebaseCloudMessageSender {
-    private final String API_URI = "https://fcm.googleapis.com/v1/projects/nhhackathon/messages:send";
+    private final String API_URI = "https://fcm.googleapis.com/v1/projects/nhhackathon-d738f/messages:send";
     private final String JSON_PATH = "firebase/firebase_service_key.json";
     private final ObjectMapper om;
 
@@ -50,12 +51,18 @@ public class FirebaseCloudMessageSender {
         return om.writeValueAsString(dto);
     }
 
-    private String getAccessToken() throws IOException {
-        GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource(JSON_PATH).getInputStream())
-                .createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"))
-                ;
-        googleCredentials.refreshIfExpired();
+    private String getAccessToken() {
+        GoogleCredentials googleCredentials;
+        try {
+            googleCredentials = GoogleCredentials
+//                    .fromStream(Objects.requireNonNull(FirebaseCloudMessageSender.class.getClassLoader().getResourceAsStream(JSON_PATH)))
+                    .fromStream(new ClassPathResource(JSON_PATH).getInputStream())
+                    .createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
+            googleCredentials.refreshIfExpired();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
         return googleCredentials.getAccessToken().getTokenValue();
     }
 }

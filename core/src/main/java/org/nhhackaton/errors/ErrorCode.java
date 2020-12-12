@@ -2,6 +2,11 @@ package org.nhhackaton.errors;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,7 +27,6 @@ public enum ErrorCode {
     //Loan
     LOAN_NOT_FOUND(400, "Cannot Found Loan")
     ;
-
 
     private final int code;
     private final String message;
