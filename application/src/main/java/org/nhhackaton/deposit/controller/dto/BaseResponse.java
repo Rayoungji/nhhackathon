@@ -3,13 +3,11 @@ package org.nhhackaton.deposit.controller.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class GetDepositResponse {
+public class BaseResponse {
 
-    private String depositPrice;
-
+    private String responseStatus;
 }
