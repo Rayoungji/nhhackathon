@@ -32,25 +32,28 @@ public class Loan {
     private Boolean isRepay;  //원금상환여부
     private long loanNo;
     private String receiverIdentity;
-    private String receiver;
-    private String receiverBankCode;
-    private String receiverAccount;
 
-    public static Loan of(Loan loan, Member member, String loanPrice, String interest, long loanNo){
+    public static Loan of(Loan loan,
+                          Member investor,
+                          String loanPrice,
+                          String interest,
+                          long loanNo){
         return Loan.builder()
                 .loanDate(loan.getLoanDate())
                 .endDate(loan.getEndDate())
                 .isRepay(loan.getIsRepay())
                 .repayCount(loan.getRepayCount())
-                .receiver(loan.getReceiver())
-                .receiverAccount(loan.getReceiverAccount())
-                .receiverBankCode(loan.getReceiverBankCode())
                 .receiverIdentity(loan.getReceiverIdentity())
-                .loanMember(member)
+                .loanMember(investor)
                 .loanPrice(loanPrice)
                 .interest(interest)
                 .loanNo(loanNo)
                 .build();
+    }
+
+    public Loan update(){
+        this.isRepay = !this.isRepay;
+        return this;
     }
 
 }

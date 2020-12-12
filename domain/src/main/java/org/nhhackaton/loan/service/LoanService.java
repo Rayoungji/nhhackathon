@@ -58,7 +58,9 @@ public class LoanService {
     @Transactional
     public void executeLoan(Loan loan){
 
-        if(!memberRepository.findByIdentity(loan.getReceiverIdentity()).orElseThrow(MemberNotFoundException::new).isVerified())
+        Member receiver = memberRepository.findByIdentity(loan.getReceiverIdentity()).orElseThrow(MemberNotFoundException::new);
+
+        if(!receiver.isVerified())
             throw new UserDefineException("검증 진행 후에 이용해주세요");
 
         Optional<Loan> foundLoan = loanRepository.findFirstByOrderByIdDesc();
@@ -94,9 +96,9 @@ public class LoanService {
                                 .sum(),
                         String.valueOf(ChronoUnit.MONTHS.between(loan.getEndDate(), loan.getLoanDate())),
                         String.valueOf(loan.getLoanNo()),
-                        loan.getReceiverBankCode(),
-                        loan.getReceiverAccount(),
-                        loan.getReceiver(),
+                        receiver.getBcCd(),
+                        receiver.getAccountNum(),
+                        receiver.getName(),
                         Arrays.asList()
                 )
         );
@@ -156,8 +158,11 @@ public class LoanService {
         return loanRepository.findByReceiverIdentity(identity);
     }
 
+
     public void executeRepayment(String loanNo){
         List<Loan> loanList = loanRepository.findByLoanNo(loanNo);
+
+        Member receiver = memberRepository.findByIdentity(loanList.get(0).getReceiverIdentity()).orElseThrow(MemberNotFoundException::new);
 
         InterestRepaymentRequest interestRepaymentRequest =
                 InterestRepaymentRequest.builder()
@@ -173,18 +178,23 @@ public class LoanService {
                          )
                     )
                     .RpayYmd(LocalDate.now().toString().replaceAll("-", ""))
-                    .DractOtlt(loanList.get(0).getReceiver() + "투자금 회수")
+                    .DractOtlt(receiver.getName() + "투자금 회수")
                     .MractOtlt("원금 상환")
                     .Rec(
                             loanList.stream()
-                                    .map(loan -> InterestRepaymentREC.of(loan.getReceiverAccount(), loan.getLoanPrice()))
+                                    .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getAccountNum(), loan.getLoanPrice()))
                                     .collect(Collectors.toList())
                     )
                     .build();
 
 
-        ResponseEntity<InterestRepaymentResponse> interestRepaymentResponseResponseEntity = p2PApiService.executeInterest(interestRepaymentRequest);
-        //TODO 투자 예치금 반환
+        p2PApiService.executeInterest(interestRepaymentRequest);
+        loanList.stream()
+                .forEach(loan -> returnDeposit(loan, loan.getLoanPrice(), false));
+
+        loanList.stream()
+                .map(loan -> loan.update())
+                .forEach(loan -> loanRepository.save(loan));
 
     }
 
@@ -209,14 +219,32 @@ public class LoanService {
                         .MractOtlt("이자 상환")
                         .Rec(
                                 loanList.stream()
-                                        .map(loan -> InterestRepaymentREC.of(loan.getReceiverAccount(), loan.getInterest()))
+                                        .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getAccountNum(), loan.getInterest()))
                                         .collect(Collectors.toList())
                         )
                         .build();
 
 
-        ResponseEntity<InterestRepaymentResponse> interestRepaymentResponseResponseEntity = p2PApiService.executeInterest(interestRepaymentRequest);
-        //TODO 투자 예치금 반환
+        p2PApiService.executeInterest(interestRepaymentRequest);
+
+        loanList.stream()
+                .forEach(loan -> returnDeposit(loan, loan.getInterest(), true));
+    }
+
+    private void returnDeposit(Loan loan, String price, boolean isInterest){
+
+        DepositReturnRequest depositReturnRequest = DepositReturnRequest.builder()
+                .P2pCmtmNo("0000000000")
+                .ChidSqno("0000000000")
+                .Vran(loan.getLoanMember().getInvestVirtualAccount())
+                .RtnAmt(price)
+                .Bncd(loan.getLoanMember().getBcCd())
+                .Dpnm(loan.getLoanMember().getName())
+                .IvstrAcct(loan.getLoanMember().getAccountNum())
+                .MractOtlt(isInterest ? "이자입금" : "원금입금")
+                .build();
+
+        p2PApiService.executeDepositReturn(depositReturnRequest);
     }
 
     private List<Invest> getInvestorList(String loanPrice){
