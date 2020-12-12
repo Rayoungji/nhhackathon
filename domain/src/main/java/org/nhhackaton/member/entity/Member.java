@@ -1,32 +1,42 @@
 package org.nhhackaton.member.entity;
 
-import lombok.Builder;
+import lombok.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "MEMBERS")
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member {
 
-    @Id @Column(name = "MEMBER_ID")
+    @Id
+    @Column(name = "MEMBER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String identity;
     private String password;
+    private String birthday;
+    private String name;
     private String investVirtualAccount;
     private String repaymentVirtualAccount;
     private String investFinAccount;
     private String repaymentFinAccount;
 
 
-    @Builder
-    public Member(String identity, String password, String investVirtualAccount, String repaymentVirtualAccount, String investFinAccount, String repaymentFinAccount) {
-        this.identity = identity;
-        this.password = password;
-        this.investVirtualAccount = investVirtualAccount;
-        this.repaymentVirtualAccount = repaymentVirtualAccount;
+    public void setInvestFinAccount(String investFinAccount) {
         this.investFinAccount = investFinAccount;
+    }
+
+    public void setRepaymentFinAccount(String repaymentFinAccount) {
         this.repaymentFinAccount = repaymentFinAccount;
+    }
+
+    public void setInvestVirtualAccount(String investVirtualAccount) {
+        this.investVirtualAccount = investVirtualAccount;
     }
 }

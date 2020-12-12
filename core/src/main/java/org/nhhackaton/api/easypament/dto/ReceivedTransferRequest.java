@@ -1,12 +1,16 @@
 package org.nhhackaton.api.easypament.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.nhhackaton.api.HeaderRequestParent;
 
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ReceivedTransferRequest extends HeaderRequestParent {
 
     @JsonProperty("Bncd")

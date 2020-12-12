@@ -1,11 +1,12 @@
 package org.nhhackaton.deposit.controller;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nhhackaton.api.finaccount.FinAccountApiService;
-import org.nhhackaton.api.finaccount.dto.ApplyInvestRequest;
-import org.nhhackaton.api.finaccount.dto.OpenFinAccountRequest;
-import org.nhhackaton.api.finaccount.dto.OpenFinAccountResponse;
+import org.nhhackaton.api.finaccount.dto.*;
+import org.nhhackaton.invest.service.InvestService;
+import org.nhhackaton.member.entity.Member;
+import org.nhhackaton.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,25 +16,31 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class DepositController {
 
-    private final FinAccountApiService FinAccountApiService;
+    private final MemberService memberService;
+    private final InvestService investService;
 
-    @PostMapping("/invest")
-    public ResponseEntity putDepositMoneyToVirtualAccount(@RequestBody ApplyInvestRequest applyInvestRequest) {
-
-        OpenFinAccountRequest openFinAccountRequest = OpenFinAccountRequest.builder()
-                .DrtrRgyn(applyInvestRequest.getDrtrRgyn())
-                .BrdtBrno(applyInvestRequest.getBrdtBrno())
-                .Bncd(applyInvestRequest.getBncd())
-                .Acno(applyInvestRequest.getAcno()).build();
-
-        ResponseEntity<OpenFinAccountResponse> call = FinAccountApiService.open(openFinAccountRequest);
-        System.out.println(call.getBody().getHeader().getRsms());
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/balance")
-    public ResponseEntity getBalanceMoneyFromVirtualAccount(){
+    @GetMapping("/{identity}")
+    public ResponseEntity getDeposit(@PathVariable String identity) {
         return null;
     }
 
+    @PostMapping("/apply-invest/{identity}")
+    public ResponseEntity applyInvest(@PathVariable String identity, @RequestBody ApplyInvestRequest applyInvestRequest) {
+
+        Member loginMember = memberService.getMemberByIdentity(identity);
+
+        if (loginMember.getInvestFinAccount() == null) {
+            OpenFinAccountRequest openFinAccountRequest = OpenFinAccountRequest.builder()
+                    .DrtrRgyn("Y")
+                    .BrdtBrno(loginMember.getBirthday())
+                    .Bncd(applyInvestRequest.getBncd())
+                    .Acno(applyInvestRequest.getAcno()).build();
+
+            investService.makeInvestFinAccount(loginMember, openFinAccountRequest);
+        }
+
+        investService.applyInvest(loginMember, applyInvestRequest.getInvestPrice());
+
+        return ResponseEntity.ok().build();
+    }
 }

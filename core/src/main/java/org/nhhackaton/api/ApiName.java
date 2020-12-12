@@ -4,18 +4,18 @@ import lombok.Getter;
 
 @Getter
 public enum ApiName {
-    VIRTUAL_ACCOUNT("P2PNVirtualAccountNumberRequest.nh"),
-    RECEIVER_INFORMATION("P2PNAccountReceiveInformationList.nh"),
-    INVEST_PAYMENTS("P2PNInvestmentPaymentOrder.nh"),
-    INVEST_RESULT("P2PNInvestmentLoanExecutionResultInquiry.nh"),
-    INTEREST_REPAYMENT("P2PNInterestRepayment.nh"),
-    INTEREST_RESULT("P2PNInterestPaymentAccountReceiveResultConfirmation.nh"),
-    DEPOSIT_RETURN("P2PNInvestmentDepositAmountReturn.nh"),
-    DEPOSIT_RESULT("P2PNInvestmentDepositAmountReturnResultList.nh"),
-    OPEN_ACCOUNT("OpenFinAccountDirect.nh"),
-    CHECK_ACCOUNT("CheckFinAccountDirect.nh"),
-    Drawing_Transfer("DrawingTransfer.nh"),
-    Received_Transfer("ReceivedTransferAccountNumber.nh");
+    VIRTUAL_ACCOUNT("P2PNVirtualAccountNumberRequest"),
+    RECEIVER_INFORMATION("P2PNAccountReceiveInformationList"),
+    INVEST_PAYMENTS("P2PNInvestmentPaymentOrder"),
+    INVEST_RESULT("P2PNInvestmentLoanExecutionResultInquiry"),
+    INTEREST_REPAYMENT("P2PNInterestRepayment"),
+    INTEREST_RESULT("P2PNInterestPaymentAccountReceiveResultConfirmation"),
+    DEPOSIT_RETURN("P2PNInvestmentDepositAmountReturn"),
+    DEPOSIT_RESULT("P2PNInvestmentDepositAmountReturnResultList"),
+    OPEN_ACCOUNT("OpenFinAccountDirect"),
+    CHECK_ACCOUNT("CheckOpenFinAccountDirect"),
+    Drawing_Transfer("DrawingTransfer"),
+    Received_Transfer("ReceivedTransferAccountNumber");
 
     private String name;
 

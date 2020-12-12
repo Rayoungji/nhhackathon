@@ -18,7 +18,7 @@ public class ApiCallService<T> {
     private final RestTemplate restTemplate;
 
     public ResponseEntity<T> post(ApiName api, HeaderRequestParent body, Class<T> clazz) {
-        return callApiEndpoint(api.getName(), HttpMethod.POST, setHeader(), setBody(api.getName(), body), clazz);
+        return callApiEndpoint(api.getName()+".nh", HttpMethod.POST, setHeader(), setBody(api.getName(), body), clazz);
     }
 
     private ResponseEntity<T> callApiEndpoint(String api, HttpMethod httpMethod, HttpHeaders httpHeaders, Object body, Class<T> clazz) {
