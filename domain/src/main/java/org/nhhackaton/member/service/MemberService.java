@@ -39,9 +39,9 @@ public class MemberService {
         }
     }
 
-    public void saveDocument(List<Document> documents){
+    public void saveDocument(List<Document> documents) {
         documentRepository.saveAll(documents);
-
+    }
 
     public Member getMemberByIdentity(String identity){
         return memberRepository.findByIdentity(identity).orElseThrow(EntityExistsException::new);

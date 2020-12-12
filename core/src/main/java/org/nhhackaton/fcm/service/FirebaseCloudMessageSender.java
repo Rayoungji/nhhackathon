@@ -12,6 +12,7 @@ import org.nhhackaton.fcm.dto.FcmMessageDto;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 // 빈으로 등록
@@ -52,7 +53,7 @@ public class FirebaseCloudMessageSender {
     private String getAccessToken() throws IOException {
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(JSON_PATH).getInputStream())
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"))
+                .createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"))
                 ;
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
