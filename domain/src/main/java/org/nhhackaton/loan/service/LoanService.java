@@ -207,53 +207,7 @@ public class LoanService {
                 .forEach(loan -> loanRepository.save(loan));
 
     }
-    @Transactional
-    public void executeInterestRepayment(String loanNo){
-        List<Loan> loanList = loanRepository.findByLoanNo(Long.parseLong(loanNo));
 
-        Member receiver = memberRepository.findByIdentity(loanList.get(0).getReceiverIdentity()).orElseThrow(MemberNotFoundException::new);
-
-        InterestRepaymentRequest interestRepaymentRequest =
-                InterestRepaymentRequest.builder()
-                        .P2pCmtmNo("0000000000")
-                        .ChidSqno("0000000000")
-                        .LoanNo(loanNo)
-                        .RpaySumAmt(
-                                String.valueOf(
-                                        loanList.stream()
-                                                .map(Loan::getInterest)
-                                                .mapToDouble(Float::parseFloat)
-                                                .sum()
-                                )
-                        )
-                        .Vran(receiver.getRepaymentVirtualAccount())
-                        .RpayYmd(LocalDate.now().toString().replaceAll("-", ""))
-                        .DractOtlt(LocalDate.now().getMonthValue()+ "월분 이자")
-                        .MractOtlt("이자 상환")
-                        .Rec(
-                                loanList.stream()
-                                        .map(loan -> InterestRepaymentREC.of(loan.getLoanMember().getInvestVirtualAccount(), loan.getInterest()))
-                                        .collect(Collectors.toList())
-                        )
-                        .build();
-
-
-        ResponseEntity<InterestRepaymentResponse> interestRepaymentResponseResponseEntity = p2PApiService.executeInterest(interestRepaymentRequest);
-        System.out.println("원리금 상환 : " + interestRepaymentResponseResponseEntity.getBody().getHeader().getRsms());
-
-        loanList.stream()
-                .forEach(loan -> {
-                    loanRepository.save(loan.updateCount());
-                    interestRepository.save(
-                            Interest.builder()
-                                    .borrower(receiver.getIdentity())
-                                    .investor(loan.getLoanMember().getIdentity())
-                                    .repaymentDate(LocalDate.now())
-                                    .repaymentPrice(loan.getInterest())
-                                    .build());
-                    returnDeposit(loan, loan.getInterest(), true);
-                });
-    }
 
     private void returnDeposit(Loan loan, String price, boolean isInterest){
 
