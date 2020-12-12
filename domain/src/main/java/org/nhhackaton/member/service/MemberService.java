@@ -47,8 +47,22 @@ public class MemberService {
         return memberRepository.findByIdentity(identity).orElseThrow(EntityExistsException::new);
     }
 
+    public void saveMember(Member member) {
+        memberRepository.save(member);
+    }
+
+    public Member login(Member member) {
+
+        //AccessToken 확인(만약 다르다면 최신화)
+
+        return memberRepository.findByIdentity(member.getIdentity()).orElseThrow(EntityExistsException::new);
+    }
+
     public Member signInForTest(Member member) {
         return memberRepository.save(member);
 
     }
+
+
+
 }
