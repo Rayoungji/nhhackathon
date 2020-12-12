@@ -1,20 +1,19 @@
-package org.nhhackaton.api.finaccount.dto;
+package org.nhhackaton.loan.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.nhhackaton.api.HeaderRequestParent;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ApplyInvestRequest {
+public class DrawLoanRequest {
 
-    @JsonProperty("investPrice")
-    private String investPrice;
+    @JsonProperty("loanPrice")
+    private String loanPrice;
 
     @JsonProperty("Bncd")
     private String Bncd;

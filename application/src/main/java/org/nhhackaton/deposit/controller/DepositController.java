@@ -3,10 +3,7 @@ package org.nhhackaton.deposit.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nhhackaton.api.finaccount.dto.*;
-import org.nhhackaton.deposit.dto.AlreadyInvestResponse;
-import org.nhhackaton.deposit.dto.ApplyInvestResponse;
-import org.nhhackaton.deposit.dto.BaseResponse;
-import org.nhhackaton.deposit.dto.GetDepositResponse;
+import org.nhhackaton.deposit.dto.*;
 import org.nhhackaton.invest.entity.Invest;
 import org.nhhackaton.invest.service.InvestService;
 import org.nhhackaton.member.entity.Member;
@@ -26,6 +23,7 @@ public class DepositController {
     private final InvestService investService;
 
     @GetMapping("/{identity}")
+    //예치금 조회
     public GetDepositResponse getDeposit(@PathVariable String identity) {
         Member loginMember = memberService.getMemberByIdentity(identity);
         Invest invest = investService.getDeposit(loginMember);
@@ -36,16 +34,6 @@ public class DepositController {
     public BaseResponse applyInvest(@PathVariable String identity, @RequestBody ApplyInvestRequest applyInvestRequest) {
 
         Member loginMember = memberService.getMemberByIdentity(identity);
-
-        if (loginMember.getInvestFinAccount() == null) {
-            OpenFinAccountRequest openFinAccountRequest = OpenFinAccountRequest.builder()
-                    .DrtrRgyn("Y")
-                    .BrdtBrno(loginMember.getBirthday())
-                    .Bncd(applyInvestRequest.getBncd())
-                    .Acno(applyInvestRequest.getAcno()).build();
-
-            investService.makeInvestFinAccount(loginMember, openFinAccountRequest);
-        }
 
         investService.applyInvest(loginMember, applyInvestRequest.getInvestPrice());
 

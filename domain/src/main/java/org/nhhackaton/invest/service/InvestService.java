@@ -39,7 +39,7 @@ public class InvestService {
                 .MractOtlt("입금되었습니다")
                 .DractOtlt("출금되었습니다")
                 .Tram(investPrice)
-                .FinAcno(member.getInvestFinAccount()).build();
+                .FinAcno(member.getFinAccount()).build();
         ResponseEntity<DrawingTransferResponse> drawingTransferResponse = transferApiService.draw(drawingTransferRequest);
         System.out.println(drawingTransferResponse.getBody().getRfsnYmd());  //투자 등록일자
 
@@ -87,9 +87,9 @@ public class InvestService {
         return investRepository.findInvestByInvestMember(member);
     }
 
-    public void makeInvestFinAccount(Member member, OpenFinAccountRequest openFinAccountRequest) {
+    public void makeFinAccount(Member member, OpenFinAccountRequest openFinAccountRequest) {
         ResponseEntity<OpenFinAccountResponse> open = finAccountApiService.open(openFinAccountRequest);
-        log.warn(" ========= MAKE INVEST FIN ACCOUNT START =============");
+        log.warn(" ========= MAKE FIN ACCOUNT START =============");
         System.out.println("OpenFin Response: " + open.getBody().getRgno());  //checkFin 요청값
 
         CheckFinAccountRequest checkFinAccountRequest = CheckFinAccountRequest.builder()
@@ -99,7 +99,7 @@ public class InvestService {
         ResponseEntity<CheckFinAccountResponse> check = finAccountApiService.check(checkFinAccountRequest);
         System.out.println("CheckFin Response: " + check.getBody().getFinAcno());  //InvestFin 발급 완료
 
-        member.setInvestFinAccount(check.getBody().getFinAcno());
+        member.setFinAccount(check.getBody().getFinAcno());
         log.warn(" ========= MAKE INVEST FIN ACCOUNT END =============");
     }
 
