@@ -27,6 +27,7 @@ public class Member {
     private String finAccount;
     private String bcCd;
     private String accountNum;
+    private String fcmToken;
     private boolean isVerified;
 
     public void validate() {
@@ -48,5 +49,9 @@ public class Member {
 
     public void setRepaymentVirtualAccount(String repaymentVirtualAccount) {
         this.repaymentVirtualAccount = repaymentVirtualAccount;
+    }
+
+    public void update(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

@@ -104,7 +104,7 @@ public class MemberController {
                 .identity(signInRequest.getIdentity())
                 .password(signInRequest.getPassword())
                 .build();
-        Member loginMember = memberService.login(member);
+        Member loginMember = memberService.login(member, signInRequest.getFcmToken());
 
         return ResponseEntity.ok(loginMember);
     }
