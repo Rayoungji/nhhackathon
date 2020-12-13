@@ -83,10 +83,6 @@ public class MemberController {
 
     @PostMapping("/signup")
     public void signUp(@RequestBody SignUpRequest signUpRequest) {
-
-        if (memberService.getMemberByIdentity(signUpRequest.getIdentity()) != null) {
-            throw new MemberAlreadyExsistException();
-        }
         Member member = Member.builder()
                 .identity(signUpRequest.getIdentity())
                 .password(signUpRequest.getPassword())
@@ -94,7 +90,6 @@ public class MemberController {
                 .name(signUpRequest.getName())
                 .build();
         memberService.saveMember(member);
-
     }
 
     @PostMapping("/signin")
@@ -119,6 +114,11 @@ public class MemberController {
         Member memberProfile = memberService.getMemberByIdentity(identity);
 
         return ResponseEntity.ok(memberProfile);
+    }
+
+    @GetMapping("/duplication/{identity}")
+    public boolean checkId(@PathVariable String identity){
+        return memberService.checkId(identity);
     }
 
 }

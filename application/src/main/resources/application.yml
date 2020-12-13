@@ -13,6 +13,6 @@ wap:
   aws:
     s3:
       cores:
-        bucket: we-are-player-bucket-test
-        accessKey: AKIA3HOU2U6W2ARI7YLQ
-        secretKey: 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
+        bucket: aws-kstars-file
+        accessKey: AKIAXZCY2QYDC7ZLLXUW
+        secretKey: 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

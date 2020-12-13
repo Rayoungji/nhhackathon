@@ -66,7 +66,10 @@ public class MemberService {
 
     public Member signInForTest(Member member) {
         return memberRepository.save(member);
+    }
 
+    public boolean checkId(String identity){
+        return memberRepository.existsByIdentity(identity);
     }
 
 
