@@ -8,10 +8,7 @@ import org.nhhackaton.errors.exception.MemberAlreadyExsistException;
 import org.nhhackaton.errors.exception.NotCorrectPasswordException;
 import org.nhhackaton.errors.exception.NotExistIdentityException;
 import org.nhhackaton.invest.service.InvestService;
-import org.nhhackaton.member.dto.DocumentRequest;
-import org.nhhackaton.member.dto.SetAccountRequest;
-import org.nhhackaton.member.dto.SignInRequest;
-import org.nhhackaton.member.dto.SignUpRequest;
+import org.nhhackaton.member.dto.*;
 import org.nhhackaton.member.entity.Member;
 import org.nhhackaton.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +32,9 @@ public class MemberController {
     }
 
     @PostMapping("/document/{identity}")
-    public String getUrl(@PathVariable String identity,
+    public MemberResponse getUrl(@PathVariable String identity,
                          MultipartFile multipartFile) {
-        return memberService.getUrl(multipartFile, identity);
+        return new MemberResponse(memberService.getUrl(multipartFile, identity));
     }
 
     @GetMapping("/a/{identity}")

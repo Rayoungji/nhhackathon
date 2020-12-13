@@ -30,7 +30,7 @@ public class Invest {
 
     public Invest update(){
         this.isLoan = true;
-        this.loanDate = LocalDate.now().toString().replaceAll("-", "");
+        this.loanDate = LocalDate.now().toString();
         return this;
     }
 }
