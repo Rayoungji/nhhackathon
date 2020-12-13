@@ -27,6 +27,7 @@ public class Member {
     private String finAccount;
     private String bcCd;
     private String accountNum;
+    @Column(length = 2000)
     private String fcmToken;
     private boolean isVerified;
 
