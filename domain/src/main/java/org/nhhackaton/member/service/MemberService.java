@@ -57,11 +57,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public Member login(Member member) {
-
+    public Member login(Member member, String fcmToken) {
+        Member savedMember = memberRepository.findByIdentity(member.getIdentity()).orElseThrow(EntityExistsException::new);
         //AccessToken 확인(만약 다르다면 최신화)
 
-        return memberRepository.findByIdentity(member.getIdentity()).orElseThrow(EntityExistsException::new);
+        savedMember.update(fcmToken);
+        return memberRepository.save(savedMember);
     }
 
     public Member signInForTest(Member member) {

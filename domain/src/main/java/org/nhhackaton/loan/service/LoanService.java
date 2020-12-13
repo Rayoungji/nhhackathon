@@ -59,9 +59,9 @@ public class LoanService {
     public void executeLoan(Loan loan){
 
         Member receiver = memberRepository.findByIdentity(loan.getReceiverIdentity()).orElseThrow(MemberNotFoundException::new);
-
-        if(!receiver.isVerified())
-            throw new UserDefineException("검증 진행 후에 이용해주세요");
+//
+//        if(!receiver.isVerified())
+//            throw new UserDefineException("검증 진행 후에 이용해주세요");
 
         Optional<Loan> foundLoan = loanRepository.findFirstByOrderByIdDesc();
 

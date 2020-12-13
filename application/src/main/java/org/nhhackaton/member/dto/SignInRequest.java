@@ -19,4 +19,7 @@ public class SignInRequest {
     @JsonProperty("password")
     private String password;
 
+    @JsonProperty("fcmToken")
+    private String fcmToken;
+
 }

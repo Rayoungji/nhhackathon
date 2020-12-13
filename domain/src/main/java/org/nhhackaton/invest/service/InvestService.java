@@ -113,7 +113,7 @@ public class InvestService {
     public void makeInvestVirtualAccount(Member member, VirtualAccountRequest virtualAccountRequest) {
         log.warn(" ========= MAKE INVEST VIRTUAL ACCOUNT START =============");
         ResponseEntity<VirtualAccountResponse> virtualAccountResponse = p2PApiService.create(virtualAccountRequest);
-        System.out.println("VirtualAccount: " + virtualAccountResponse.getBody().getVran()); //가상계좌 발급
+        System.out.println("VirtualAccount: " + virtualAccountResponse.getBody().getHeader().getRsms()); //가상계좌 발급
         member.setInvestVirtualAccount(virtualAccountResponse.getBody().getVran());
         log.warn(" ========= MAKE INVEST VIRTUAL ACCOUNT START =============");
     }
