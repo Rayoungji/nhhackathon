@@ -1,6 +1,7 @@
 package org.nhhackaton.interest.entity;
 
 import lombok.*;
+import org.nhhackaton.interest.enums.InterestState;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,5 +23,8 @@ public class Interest {
     private String investor;
     private LocalDate repaymentDate;
     private String repaymentPrice;
+
+    @Enumerated(value = EnumType.STRING)
+    private InterestState state;
 
 }

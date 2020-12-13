@@ -39,3 +39,4 @@ out/
 .vscode/
 core/src/main/resources/firebase/firebase_service_key.json
 application/src/main/resources/firebase/firebase_service_key.json
+batch/src/main/resources/firebase/firebase_service_key.json

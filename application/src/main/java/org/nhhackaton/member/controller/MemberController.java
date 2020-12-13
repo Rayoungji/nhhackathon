@@ -1,5 +1,6 @@
 package org.nhhackaton.member.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.nhhackaton.api.finaccount.dto.OpenFinAccountRequest;
@@ -7,17 +8,20 @@ import org.nhhackaton.deposit.dto.BaseResponse;
 import org.nhhackaton.errors.exception.MemberAlreadyExsistException;
 import org.nhhackaton.errors.exception.NotCorrectPasswordException;
 import org.nhhackaton.errors.exception.NotExistIdentityException;
+import org.nhhackaton.fcm.service.FirebaseCloudMessageSender;
 import org.nhhackaton.invest.service.InvestService;
 import org.nhhackaton.member.dto.DocumentRequest;
 import org.nhhackaton.member.dto.SetAccountRequest;
 import org.nhhackaton.member.dto.SignInRequest;
 import org.nhhackaton.member.dto.SignUpRequest;
 import org.nhhackaton.member.entity.Member;
+import org.nhhackaton.member.repository.MemberRepository;
 import org.nhhackaton.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,4 +125,12 @@ public class MemberController {
         return memberService.checkId(identity);
     }
 
+    private final FirebaseCloudMessageSender sender = new FirebaseCloudMessageSender(new ObjectMapper());
+    private final MemberRepository repository;
+    @GetMapping("/send")
+    public void send() throws IOException {
+//        String token = "eHzxHRzMSTquQLNIbQDaWb:APA91bFG6JXETXxWnIT575cJ44XLge6qKhc1IPH9_u3W3-XwtX2do98tve3osRZggINW0iDvN7Ql0uPrlbB8mhr7tJ-weQ36ApGhgl4wFkjobkyGJ0SE6amcL3wkZ8Xh8jlxXBVcEClQ";
+        Member yun = memberService.getMemberByIdentity("yun");
+        sender.sendMessageTo(yun.getFcmToken(), "Test", "test");
+    }
 }
